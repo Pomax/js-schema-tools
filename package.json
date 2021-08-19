@@ -1,0 +1,25 @@
+{
+  "name": "js-datastore-with-schema",
+  "version": "1.0.0",
+  "description": "A schema-enabled datastore for JS objects",
+  "main": "index.js",
+  "type": "module",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test/test.js && npm run clean",
+    "clean": "rm -rf ./json-data-store"
+  },
+  "keywords": [
+    "js",
+    "datastore",
+    "json",
+    "flat",
+    "file",
+    "db",
+    "schema"
+  ],
+  "author": "Pomax",
+  "license": "MIT"
+}

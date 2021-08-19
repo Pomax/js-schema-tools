@@ -1,0 +1,31 @@
+{
+  "nested_property": {
+    "name": "alice"
+  },
+  "movable_nested_property": {
+    "nested_object": {
+      "nested_value": "some value"
+    }
+  },
+  "allow_chat": true,
+  "auto_start_on_join": true,
+  "bot_humanizing_delay": 100,
+  "end_of_hand_timeout": 10000,
+  "force_open_play": false,
+  "game_mode": "normal",
+  "game_start_timeout": 0,
+  "hand_start_timeout": 10000,
+  "play_once_ready": false,
+  "player_count": 4,
+  "randomize_seats": false,
+  "rotate_on_draw": true,
+  "rotate_on_east_win": true,
+  "ruleset": "Chinese Classical",
+  "seat_rotation": 1,
+  "track_discards": true,
+  "use_single_player_timeouts": false,
+  "wind_rotation": 1,
+  "prng_seed": 0,
+  "wallhack": false,
+  "max_timeout": 2147483647
+}
