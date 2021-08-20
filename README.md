@@ -28,9 +28,9 @@ See [the schema docs](./lib/schema/README.md) for details.
 
 #### (P)React + Arbitrary tech stacks
 
-- `createFormTree(schema, object, options = {})`
-- `createTableTree(schema, object, options = {})`
-- `createTableTreeRows(schema, object, options = {})`
+- `createFormTree(schema, object, options)`
+- `createTableTree(schema, object, options)`
+- `createTableTreeRows(schema, object, options)`
 
 ## JSON Store API
 
