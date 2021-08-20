@@ -20,7 +20,7 @@ The `metadata` definition is an object of the form:
 ```js
 {
     name: [string],
-    id: [string],
+    version: [integer],
     required: [boolean],
     configurable: [boolean],
     debug: [boolean],
@@ -28,9 +28,9 @@ The `metadata` definition is an object of the form:
     schema: [relative path string],
 }
 ```
-Except for `name` and `id`, all values are optional, as is the `__meta` property itself.
+The top-level `__meta` property _must_ exist, and _must_ specify the `name` and `version` values. Anywhere else the `__meta` property, and any properties in it, are optional.
 
-Additionally, any number of custom properties are allowed inside the __meta object, because it's a convenient place to house application-specific metadata for your objects.
+Note that custom properties are perfectly allowed inside the __meta object, because it's a convenient place to house application-specific metadata.
 
 ### metadata properties
 
@@ -94,12 +94,123 @@ For embedded schema, the `__meta.name` and `__meta.id` values are not required.
 
 ## Validation
 
-TEXT GOES HERE, INCLUDE COERCION FLAG
+Validating an object for schema conformance is a simple matter of running the validation function:
+
+```js
+const result = validate(schema, object);
+
+if(result.passed) {
+  if (result.warnings) {
+    console.log(`Validation passed, with warnings:`, result.warnings);
+  } else {
+    console.log(`Validation passed`);
+  }
+} else {
+  console.error(`Validation failed:`, result.error);
+}
+```
+
+where the validation result is an object of the following type:
+```js
+{
+  passed:   [boolean],
+  warnings: [array of warning strings],
+  errors:   [array of error strings],
+}
+```
+
+Additionally, you can create a dedicated validator for a schema, so you don't need to keep a reference to the schema around all the time:
+
+```js
+const validate = createValidator(schema1);
+
+// ...
+
+function validateAll(objects, validator) {
+  return objects.every(o => validator(o).passed);
+}
+
+// ...
+
+validateAll(objects, validate);
+```
 
 ## Form building
 
-TEXT GOES HERE, EXPLAIN TREE GENERATION USING `create:...`, AND BUILT IN PLAIN HTML + DOM
+In order to work with schema'd objects, the code comes with dedicated HTML and (P)React form building code:
 
+### ◆ HTML snippets
+
+There are three functions that can be used to generate HTML snippets:
+
+#### createFormHTML(schema, object)
+
+This creates a full `<form>...<form>` snippet for working with your object in a schema-conformant way.
+
+#### createTableHTML(schema, object)
+
+This creates a `<table>...<table>` snippet for working with your object in a schema-conformant way, but presented in tabular form.
+
+#### createTableRowHTML(schema, object)
+
+If you already have `<table>...<table>` code and you simply want to "slot in" the rows for working with your object in a schema-conformant way, you want this function.
+
+### ◆ (P)React code
+
+There are (P)React equivalents for all three above functions:
+
+#### createFormTree(schema, object, options = {})
+
+This creates a full `<form>...<form>` component tree for working with your object in a schema-conformant way.
+
+An `options.onSubmit` can be specified, which will be used as submit handler for the form.
+
+An `options.label` function taking a single string argument can be specified, which will be used to convert object key names to useful labels (e.g. replacing `snake_case` with `Sentence case`).
+
+#### createTableTree(schema, object, options = {})
+
+This creates a `<table>...<table>` component for working with your object in a schema-conformant way, but presented in tabular form.
+
+An `options.label` function taking a single string argument can be specified, which will be used to convert object key names to useful labels (e.g. replacing `snake_case` with `Sentence case`).
+
+#### createTableTreeRows(schema, object, options = {})
+
+If you already have table component and you simply want to template in the rows for working with your object in a schema-conformant way, you want this function.
+
+An `options.label` function taking a single string argument can be specified, which will be used to convert object key names to useful labels (e.g. replacing `snake_case` with `Sentence case`).
+
+### ◆　"Anything", by specfiying a `create` function
+
+Technically the `createFormTree`, `createTableTree`, and `createTableTreeRows` functions can be made to generate anything you want by specifying your own `create` function as part of the options. In fact, that's how the HTML snippets are generated:
+
+```js
+function create(tag, props) {
+  const element = document.createElement(tag);
+  if (props.children) {
+    props.children.forEach((c) => element.appendChild(c));
+  }
+  htmlProps.forEach((prop) => {
+    if (props[prop] !== undefined) {
+      element[prop] = props[prop];
+    }
+  });
+  return element;
+}
+
+function createFormHTML(schema, object, options = {}) {
+  return createFormTree(schema, object, { create, ...options }).outerHTML;
+}
+
+function createTableHTML(schema, object, options = {}) {
+  return createTableTree(schema, object, { create, ...options }).outerHTML;
+}
+
+function createTableRowHTML(schema, object, options = {}) {
+  return createTableTreeRows(schema, object, { create, ...options })
+    .map((tr) => tr.outerHTML)
+    .join(`\n`);
+}
+```
 
 ## Schema examples
 
