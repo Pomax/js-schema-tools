@@ -42,3 +42,23 @@ See [the diffing docs](./lib/diff/README.md) for details.
 See [the docs for `equals()`](./lib/equal/README.md) for details.
 
 `equals(o1, o2, strict = true)`
+
+# Dev
+
+If you want to work on this with me, drop me a line.
+
+## Running tests
+
+There's a whole bunch of pure-node tests that can be run by using `node whatever/it/may/be/test.js`. These tests are not so much exhaustive tests as they are representative tests that can be modified and rerun to see things still working the way they're supposed to.
+
+## Releases
+
+None right now, because of...
+
+## Documentation
+
+The docs need a lot more examples, and prose-reworking, because so far this has been a development exercise, and that's not good reading material in terms of a manual/handbook for using the "stack".
+
+## Engagement
+
+Hit me up via email (which I'm pretty sure Github will tell you about), or [tweetspace](https://twitter.com/TheRealPomax), or [tootspace](https://mastodon.social/users/TheRealPomax). 
