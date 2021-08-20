@@ -43,9 +43,9 @@ See [the docs for `equals()`](./lib/equal/README.md) for details.
 
 `equals(o1, o2, strict = true)`
 
-# Dev
+# Dev / working on this code
 
-If you want to work on this with me, drop me a line.
+If you want to work on this with me, drop me a line!
 
 ## Running tests
 
