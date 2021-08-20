@@ -54,7 +54,7 @@ See [the diffing docs](./lib/diff/README.md) for details.
 
 ## Equals API
 
-See [the docs for `equals()`](./lib/equal/README.md) for details.
+See [the docs for `equals()`](./lib/equals/README.md) for details.
 
 `equals(o1, o2, strict = true)`
 
