@@ -16,6 +16,21 @@ See [the schema docs](./lib/schema/README.md) for details.
 - `migrate(object, schema1, schema1)`
 - `migrate(object, migration_operations)`
 
+## Form generation API
+
+See [the schema docs](./lib/schema/README.md) for details.
+
+#### HTML
+
+- `createFormHTML(schema, object)`
+- `createTableHTML(schema, object)`
+- `createTableRowHTML(schema, object)`
+
+#### (P)React + Arbitrary tech stacks
+
+- `createFormTree(schema, object, options = {})`
+- `createTableTree(schema, object, options = {})`
+- `createTableTreeRows(schema, object, options = {})`
 
 ## JSON Store API
 
@@ -28,7 +43,6 @@ See [the JSON store docs](./lib/store/README.md) for details.
 - `get(key)`
 - `put(key)`
 - `remove(key)`
-
 
 ## Diff API
 
