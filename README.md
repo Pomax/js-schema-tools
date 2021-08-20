@@ -1,6 +1,7 @@
 # A set of JS Schema tools
 
 - A basic JS object schema framework geared towards "data definition" rather than comprehensive data validation (akin to table definitions in a database).
+- Utility functions for creating HTML, (P)React, and "arbitrary tech stack" forms for working with schema'd objects.
 - A simple JSON-based human-readable, human-editable document store with schema support
 - A JS differ that allows for three-way diffs (e.g. applying schema1 → schema2 transforms to _instances_ of schema1, to make them schema2-conformant).
 - An `equals(o1, o2)` function that allows for both strict and coerced equality testing.
