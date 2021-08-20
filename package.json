@@ -1,7 +1,7 @@
 {
-  "name": "js-datastore-with-schema",
+  "name": "js-schema-tools",
   "version": "1.0.0",
-  "description": "A schema-enabled datastore for JS objects",
+  "description": "A collection of schema-enabled JS tools",
   "main": "index.js",
   "type": "module",
   "directories": {
