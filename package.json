@@ -1,6 +1,6 @@
 {
   "name": "js-schema-tools",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A collection of schema-enabled JS tools",
   "main": "index.js",
   "type": "module",
