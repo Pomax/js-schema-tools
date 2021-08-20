@@ -41,7 +41,7 @@ See [the JSON store docs](./lib/store/README.md) for details.
 - `migrate(newschema)`
 - `view(primaryKey)`
 - `get(key)`
-- `put(key)`
+- `put(key, value)`
 - `remove(key)`
 
 ## Diff API
@@ -76,4 +76,4 @@ The docs need a lot more examples, and prose-reworking, because so far this has 
 
 ## Engagement
 
-Hit me up via email (which I'm pretty sure Github will tell you about), or [tweetspace](https://twitter.com/TheRealPomax), or [tootspace](https://mastodon.social/users/TheRealPomax). 
+Hit me up via email (which I'm pretty sure Github will tell you about), or [tweetspace](https://twitter.com/TheRealPomax), or [tootspace](https://mastodon.social/users/TheRealPomax).
