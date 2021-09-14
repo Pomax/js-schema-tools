@@ -4,12 +4,13 @@
   "description": "A collection of schema-enabled JS tools",
   "main": "index.js",
   "type": "module",
-  "directories": {
-    "test": "test"
+  "bin": {
+    "jss-makemigration": "./lib/schema/migrations/cli.js"
   },
   "scripts": {
     "test": "node test/test.js && npm run clean",
-    "clean": "rm -rf ./json-data-store"
+    "clean": "rm -rf ./json-data-store",
+    "testcli": "npm uninstall -g && npm install -g && jss-makemigrations"
   },
   "keywords": [
     "js",
