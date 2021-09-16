@@ -1,18 +1,15 @@
-import path from "path";
 import { User } from "./user.models.js";
-import { Models } from "../lib/models/models.js";
 
-// Register our model, to make sure we don't need migrations
-
+// Figure out where the test store dir can be found based on the module "url"
+import path from "path";
 const moduleURL = new URL(import.meta.url);
 const moduleDir = path.dirname(
   moduleURL.href.replace(`file:///`, process.platform === `win32` ? `` : `/`)
 );
-Models.setStoreLocation(`${moduleDir}/store`);
 
-// Let's try to load our model "from" a data file.
+// Right: let's try to load our model "from" a data file.
 
-const user = User.load("TestUser");
+const user = User.load(`TestUser`, `${moduleDir}/store`);
 console.log(user.toString());
 
 // Next, a legal change to allow_chat, which is a Models.boolean:
