@@ -1,0 +1,19 @@
+{
+  "admin": true,
+  "profile": {
+    "name": "TestUser",
+    "password": "TestUser",
+    "preferences": {
+      "avatar": "test-user.png",
+      "config": {
+        "allow_chat": false,
+        "end_of_hand_timeout": 2147483647,
+        "hand_start_timeout": 0,
+        "play_once_ready": true,
+        "rotate_on_draw": false,
+        "rotate_on_east_win": false
+      },
+      "layout": "stacked"
+    }
+  }
+}

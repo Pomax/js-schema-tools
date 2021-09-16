@@ -1,0 +1,70 @@
+{
+  "__meta": {
+    "description": "Mahjong user data",
+    "distinct": true,
+    "filename": "profile.name",
+    "name": "users"
+  },
+  "admin": {
+    "__meta": {
+      "configurable": false
+    },
+    "default": false,
+    "type": "boolean"
+  },
+  "profile": {
+    "__meta": {
+      "description": "...",
+      "distinct": false,
+      "required": true
+    },
+    "shape": {
+      "name": {
+        "__meta": {
+          "configurable": false,
+          "required": true
+        },
+        "type": "string"
+      },
+      "password": {
+        "__meta": {
+          "configurable": false,
+          "required": true
+        },
+        "type": "string"
+      },
+      "preferences": {
+        "__meta": {
+          "description": "General preferences object",
+          "distinct": false
+        },
+        "shape": {
+          "avatar": {
+            "__meta": {
+              "description": "A picture that identifies this user",
+              "validate_as": "filename"
+            },
+            "type": "string"
+          },
+          "config": {
+            "__meta": {
+              "schema": "Config",
+              "schemaName": "config"
+            }
+          },
+          "layout": {
+            "__meta": {
+              "description": "Preferred game layout"
+            },
+            "choices": [
+              "traditional",
+              "stacked"
+            ],
+            "default": "traditional",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
