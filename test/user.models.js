@@ -20,7 +20,7 @@ class User extends Model {
 /**
  * ...
  */
-class Profile extends Model {
+export class Profile extends Model {
   __meta = {
     description: `...`,
     distinct: false, // Unlike the User model, this model should not be captured in its own file.

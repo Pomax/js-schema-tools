@@ -11,7 +11,8 @@
     "test": "node test/test.js && npm run clean",
     "clean": "rm -rf ./json-data-store",
     "test:cli": "npm uninstall -g && npm install -g && jss-makemigrations",
-    "test:model": "node ./test/model.test.js"
+    "test:model": "node ./test/model.test.js",
+    "test:migrate": "npm run test:model && node ./test/migration.test.js"
   },
   "keywords": [
     "js",
