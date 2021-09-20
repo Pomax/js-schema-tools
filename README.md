@@ -2,9 +2,15 @@
 
 - A basic JS object schema framework geared towards "data definition" rather than comprehensive data validation (akin to table definitions in a database).
 - Utility functions for creating HTML, (P)React, and "arbitrary tech stack" forms for working with schema'd objects.
-- A simple JSON-based human-readable, human-editable document store with schema support
 - A JS differ that allows for three-way diffs (e.g. applying schema1 → schema2 transforms to _instances_ of schema1, to make them schema2-conformant).
 - An `equals(o1, o2)` function that allows for both strict and coerced equality testing.
+
+## Model API
+
+See [the model docs](./lib/models/README.md) for details
+
+- `Models.create(Model, [data])`
+- `Model` class + `Models.fields`
 
 ## Schema API
 
@@ -31,18 +37,6 @@ See [the schema docs](./lib/schema/README.md) for details.
 - `createFormTree(schema, object, options)`
 - `createTableTree(schema, object, options)`
 - `createTableTreeRows(schema, object, options)`
-
-## JSON Store API
-
-See [the JSON store docs](./lib/store/README.md) for details.
-
-- `store` / `new Store()` / `new JSONDataStore()`
-- `load(namespace, schema)`
-- `migrate(newschema)`
-- `view(primaryKey)`
-- `get(key)`
-- `put(key, value)`
-- `remove(key)`
 
 ## Diff API
 
