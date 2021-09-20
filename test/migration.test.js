@@ -34,3 +34,5 @@ try {
     if (!keepFiles) fs.unlinkSync(migrationPath);
   }
 }
+
+if (!keepFiles) console.log(`\nCleaned up files (run with --keep to preserve these files)`);

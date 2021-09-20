@@ -1,73 +1,33 @@
-# A set of JS Schema tools
+# Model/schema dot js
 
-- A basic JS object schema framework geared towards "data definition" rather than comprehensive data validation (akin to table definitions in a database).
-- Utility functions for creating HTML, (P)React, and "arbitrary tech stack" forms for working with schema'd objects.
-- A JS differ that allows for three-way diffs (e.g. applying schema1 → schema2 transforms to _instances_ of schema1, to make them schema2-conformant).
-- An `equals(o1, o2)` function that allows for both strict and coerced equality testing.
+IF you've ever wished you could work with JS objects that had built-in data validation, then this is the solution for you.
 
-## Model API
+1. Models
 
-See [the model docs](./lib/models/README.md) for details
+2. Schema
 
-- `Models.create(Model, [data])`
-- `Model` class + `Models.fields`
+```
+import { Model, Models } from "../lib/models/models.js";
 
-## Schema API
+const MyModel extends Model {
+    __meta = {
+        description: "my model",
+        distinct: true,
+        filename: `name`,
+    }
 
-See [the schema docs](./lib/schema/README.md) for details.
+  name = Models.fields.string({ required: true, default: `` });
+  nickname = Models.fields.string();
+}
 
-- `loadSchema(path)`
-- `validate(schema, object, strict = true)`
-- `createValidator(schema, strict = true)`
-- `migrate(object, schema1, schema1)`
-- `migrate(object, migration_operations)`
+const me = MyModel.create({
+    name: "it's my name",
+    nickname: "nick",
+});
 
-## Form generation API
+me.name = "a new name";
+me.save();
 
-See [the schema docs](./lib/schema/README.md) for details.
+const meAgain = MyModel.load(`me`);
 
-#### HTML
-
-- `createFormHTML(schema, object)`
-- `createTableHTML(schema, object)`
-- `createTableRowHTML(schema, object)`
-
-#### (P)React + Arbitrary tech stacks
-
-- `createFormTree(schema, object, options)`
-- `createTableTree(schema, object, options)`
-- `createTableTreeRows(schema, object, options)`
-
-## Diff API
-
-See [the diffing docs](./lib/diff/README.md) for details.
-
-- `create(object1, object2)` / `createDiff(object1, object2)`
-- `apply(diff, object)` / `applyDiff(diff, object)`
-- `makeChangeHandler(ignoreKey, filterKeyString)`
-
-## Equals API
-
-See [the docs for `equals()`](./lib/equals/README.md) for details.
-
-`equals(o1, o2, strict = true)`
-
-# Dev / working on this code
-
-If you want to work on this with me, drop me a line!
-
-## Running tests
-
-There's a whole bunch of pure-node tests that can be run by using `node whatever/it/may/be/test.js`. These tests are not so much exhaustive tests as they are representative tests that can be modified and rerun to see things still working the way they're supposed to.
-
-## Releases
-
-None right now, because of...
-
-## Documentation
-
-The docs need a lot more examples, and prose-reworking, because so far this has been a development exercise, and that's not good reading material in terms of a manual/handbook for using the "stack".
-
-## Engagement
-
-Hit me up via email (which I'm pretty sure Github will tell you about), or [tweetspace](https://twitter.com/TheRealPomax), or [tootspace](https://mastodon.social/users/TheRealPomax).
+```

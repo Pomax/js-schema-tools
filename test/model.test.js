@@ -46,3 +46,30 @@ user.updateFromSubmission({
 });
 
 console.log(user.toString());
+
+// valid "subtree" assignment
+user.profile = {
+  name: user.profile.name.toLowerCase(),
+  password: user.profile.password.toLowerCase(),
+  preferences: {
+    config: {
+      allow_chat: false,
+      end_of_hand_timeout: 100,
+      seat_rotation: 1,
+    },
+    layout: `stacked`,
+  },
+};
+
+// invalid "subtree" assignment
+try {
+  user.profile = {
+    preferences: {
+      config: {
+        allow_chat: `test`, // because this field has to be a boolean
+      },
+    },
+  };
+} catch (e) {
+  console.error(e);
+}
