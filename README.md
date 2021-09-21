@@ -29,6 +29,6 @@ const me = MyModel.create({
 me.name = "a new name";
 me.save();
 
-const meAgain = MyModel.load(`me`);
+const meAgain = MyModel.load(`a new name`);
 
 ```
