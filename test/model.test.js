@@ -1,75 +1,115 @@
+import path from "path";
+import { Models } from "../lib/models/models.js";
 import { User } from "./user.models.js";
 
-// Figure out where the test store dir can be found based on the module "url"
-import path from "path";
-const moduleURL = new URL(import.meta.url);
-const moduleDir = path.dirname(
-  moduleURL.href.replace(`file:///`, process.platform === `win32` ? `` : `/`)
-);
-
-// Right: let's try to load our model "from" a data file.
-
-const user = User.load(`TestUser`, `${moduleDir}/store`);
-console.log(user.toString());
-
-// Next, a legal change to allow_chat, which is a Models.boolean:
-
-try {
-  const val = user.profile.preferences.config.allow_chat;
-  user.profile.preferences.config.allow_chat = !val;
-} catch (e) {
-  console.error(e);
-}
-
-// Then, an illegal change to player_count, which must be one of [2, 3, 4]:
-
-try {
-  user.profile.preferences.config.player_count = false;
-} catch (e) {
-  console.error(e);
-}
-
-// And then let's save our model, which should update the file we originally loaded.
-user.save();
-
-// Also, let's try an update to the model based on the kind of data that we'd
-// get when generating an HTML form using user.toFormHTML() and then posting
-// data using that, which generates a flat object as post payload with object
-// property paths as keys, and all data encoded as string data.
-user.updateFromSubmission({
-  "profile.name": user.profile.name.toUpperCase(),
-  "profile.password": user.profile.password.toUpperCase(),
-  "profile.preferences.config.allow_chat": "true",
-  "profile.preferences.config.end_of_hand_timeout": "10000",
-  "profile.preferences.config.seat_rotation": "-1",
-  "profile.preferences.layout": "traditional",
+beforeAll(() => {
+  const moduleURL = new URL(import.meta.url);
+  const moduleDir = path.dirname(
+    moduleURL.href.replace(`file:///`, process.platform === `win32` ? `` : `/`)
+  );
+  Models.setStorePath(`${moduleDir}/store`);
 });
 
-console.log(user.toString());
+describe(`Testing User model`, () => {
+  let user;
 
-// valid "subtree" assignment
-user.profile = {
-  name: user.profile.name.toLowerCase(),
-  password: user.profile.password.toLowerCase(),
-  preferences: {
-    config: {
-      allow_chat: false,
-      end_of_hand_timeout: 100,
-      seat_rotation: 1,
-    },
-    layout: `stacked`,
-  },
-};
+  beforeEach(() => {
+    user = User.load(`TestUser`);
+  });
 
-// invalid "subtree" assignment
-try {
-  user.profile = {
-    preferences: {
-      config: {
-        allow_chat: `test`, // because this field has to be a boolean
-      },
-    },
-  };
-} catch (e) {
-  console.error(e);
-}
+  test(`User "TestUser" loads from file`, () => {
+    expect(user).toBeDefined();
+    const json = user.toString();
+    expect(json).toBeDefined();
+  });
+
+  test(`Saving user to file works`, () => {
+    expect(() => user.save()).not.toThrow();
+  });
+
+  test(`Toggle "config.allow_chat" is permitted`, () => {
+    const val = user.profile.preferences.config.allow_chat;
+    expect(() => {
+      user.profile.preferences.config.allow_chat = !val;
+    }).not.toThrow();
+  });
+
+  test(`Setting values from flat objects works`, () => {
+    expect(() => {
+      user.updateFromSubmission({
+        "profile.name": user.profile.name.toUpperCase(),
+        "profile.password": user.profile.password.toUpperCase(),
+        "profile.preferences.config.allow_chat": "true",
+        "profile.preferences.config.end_of_hand_timeout": "10000",
+        "profile.preferences.config.seat_rotation": "-1",
+        "profile.preferences.layout": "traditional",
+      });
+    }).not.toThrow();
+    expect(user.profile.preferences.config.end_of_hand_timeout).toBe(10000);
+  });
+
+  test(`Assigning subtrees works`, () => {
+    expect(() => {
+      user.profile = {
+        name: user.profile.name.toLowerCase(),
+        password: user.profile.password.toLowerCase(),
+        preferences: {
+          config: {
+            allow_chat: false,
+            end_of_hand_timeout: 100,
+            seat_rotation: 1,
+          },
+          layout: `stacked`,
+        },
+      };
+    }).not.toThrow();
+  });
+
+  test(`Setting "config.player_count" to false is a validation error`, () => {
+    expect(() => {
+      user.profile.preferences.config.player_count = false;
+    }).toThrow(`Could not assign key "player_count" value "false".`);
+  });
+
+  test(`Assigning bad subtrees throws`, () => {
+    try {
+      user.profile = {
+        // missing name and password fields
+        preferences: {
+          config: {
+            allow_chat: `test`, // also, this field has to be a boolean
+          },
+        },
+      };
+    } catch (e) {
+      expect(e.errors).toStrictEqual([
+        `name: required field missing.`,
+        `password: required field missing.`,
+        `preferences.config.allow_chat: value is not a valid boolean.`,
+      ]);
+    }
+  });
+
+  test(`Cannot create without initial data if there are required fields`, () => {
+    try {
+      User.create();
+    } catch (e) {
+      expect(e.errors).toStrictEqual([
+        `profile.name: required field missing.`,
+        `profile.password: required field missing.`,
+      ]);
+    }
+  });
+
+  test(`Cannot create with initial data that is missing required fields`, () => {
+    try {
+      User.create({
+        profile: {
+          password: `hake`,
+        },
+      });
+    } catch (e) {
+      expect(e.errors).toStrictEqual([`profile.name: required field missing.`]);
+    }
+  });
+});

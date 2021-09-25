@@ -10,6 +10,7 @@
   "scripts": {
     "test": "node test/test.js && npm run clean",
     "clean": "rm -rf ./json-data-store",
+    "test:jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --verbose=false test/model.test.js",
     "test:cli": "npm uninstall -g && npm install -g && jss-makemigrations",
     "test:model": "node ./test/model.test.js",
     "test:migrate": "npm run test:model && node ./test/migration.test.js"
@@ -24,5 +25,9 @@
     "schema"
   ],
   "author": "Pomax",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^27.2.2"
+  }
 }

@@ -1,33 +1,26 @@
-# Model/schema dot js
+- define a model to work with, using simple JS class syntax
+- automatic schema-backing and validation
 
-IF you've ever wished you could work with JS objects that had built-in data validation, then this is the solution for you.
+- tell the model manager which storage system to use (required)
+- Either create new models, or load them from storage
+- values are automatically validated during creation/assignment
+- simple save mechanism (data is by definition valid, default values are not stored)
 
-1. Models
 
-2. Schema
+- [TEST] successive migrations should use successive files.
+- [BUG] for compound schema, only migrate the one(s) that changed, and create a migration that covers "all schema".
 
-```
-import { Model, Models } from "../lib/models/models.js";
 
-const MyModel extends Model {
-    __meta = {
-        description: "my model",
-        distinct: true,
-        filename: `name`,
-    }
+- restructure:
+    - Model (instance)
+        - Models (factory)
+            - Fields
 
-  name = Models.fields.string({ required: true, default: `` });
-  nickname = Models.fields.string();
-}
+    - Schema (utils for working with schema objects)
+        - conformance
+        - diffing
+        - migrations
 
-const me = MyModel.create({
-    name: "it's my name",
-    nickname: "nick",
-});
-
-me.name = "a new name";
-me.save();
-
-const meAgain = MyModel.load(`me`);
-
-```
+    - Store (fs based)
+        - save/load models
+        - save/load schemas

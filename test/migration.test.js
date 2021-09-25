@@ -12,13 +12,13 @@ const keepFiles = process.argv.includes(`--keep`);
 
 // Then, try to load our model data, which will flag a schema mismatch
 // and result in a new stored schema, as well as a migration file.
-const storeLocation = `${moduleDir}/store`;
+const storePath = `${moduleDir}/store`;
 try {
-  User.load(`TestUser`, storeLocation);
+  User.load(`TestUser`, storePath);
 } catch (e) {
   console.log();
 
-  const schemaPath = `${storeLocation}/users/.schema/User.2.json`;
+  const schemaPath = `${storePath}/users/.schema/User.2.json`;
   const newSchema = fs.existsSync(schemaPath);
 
   if (newSchema) {
@@ -26,7 +26,7 @@ try {
     if (!keepFiles) fs.unlinkSync(schemaPath);
   }
 
-  const migrationPath = `${storeLocation}/users/User.v1.to.v2.js`;
+  const migrationPath = `${storePath}/users/User.v1.to.v2.js`;
   const migrationRunner = fs.existsSync(migrationPath);
 
   if (migrationRunner) {

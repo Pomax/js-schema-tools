@@ -1,4 +1,4 @@
-import { Model, Models } from "../lib/models/models.js";
+import { Model, Models } from "../lib/models/index.js";
 const { fields } = Models;
 
 /**
