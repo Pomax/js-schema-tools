@@ -1,24 +1,89 @@
+import fs from "fs";
 import path from "path";
 import { Models } from "../index.js";
 import { User } from "./user.models.js";
 
-beforeAll(() => {
-  const moduleURL = new URL(import.meta.url);
-  const moduleDir = path.dirname(
-    moduleURL.href.replace(`file:///`, process.platform === `win32` ? `` : `/`)
-  );
-  Models.setStorePath(`${moduleDir}/store`);
-});
-
+/**
+ * Our battery of User tests
+ */
 describe(`Testing User model`, () => {
+  const keepFiles = process.argv.includes(`--keep`);
+
+  const testData = {
+    admin: true,
+    profile: {
+      name: `TestUser`,
+      password: `TestUser`,
+      preferences: {
+        avatar: `test-user.png`,
+        config: {
+          allow_chat: false,
+          end_of_hand_timeout: 2147483647,
+          hand_start_timeout: 0,
+          play_once_ready: true,
+          rotate_on_draw: false,
+          rotate_on_east_win: false,
+        },
+        layout: `stacked`,
+      },
+    },
+  };
+
   let user;
 
+  /**
+   * Before we start the tests, set up a store path, and register our User
+   * model so that the on-disk schema file(s) exist when the tests run.
+   */
+  beforeAll(() => {
+    // determine our store path
+    const moduleURL = new URL(import.meta.url);
+    const moduleDir = path.dirname(
+      moduleURL.href.replace(
+        `file:///`,
+        process.platform === `win32` ? `` : `/`
+      )
+    );
+    const storePath = `${moduleDir}/store`;
+    fs.mkdirSync(storePath, { recursive: true });
+    Models.setStorePath(storePath);
+    Models.register(User);
+  });
+
+  /**
+   * Load our test user "afresh" before every test.
+   */
   beforeEach(() => {
-    user = User.load(`TestUser`);
+    try {
+      user = User.load(`TestUser`);
+    } catch (e) {
+      // this will fail for the first test, which builds this record.
+    }
+  });
+
+  /**
+   * Clean up the data store, unless the tests were run with
+   * the `--keep` flag passed, to preserve the data store.
+   */
+  afterAll(() => {
+    if (keepFiles) return;
+    fs.rmSync(Models.storePath, { recursive: true });
+  });
+
+  // THE TESTS START HERE
+
+  test(`Can create user TestUser`, () => {
+    expect(() => {
+      const user = User.create(testData);
+      user.save();
+    }).not.toThrow();
   });
 
   test(`User "TestUser" loads from file`, () => {
     expect(user).toBeDefined();
+    expect(user.profile.preferences.config.end_of_hand_timeout).toBe(
+      testData.profile.preferences.config.end_of_hand_timeout
+    );
     const json = user.toString();
     expect(json).toBeDefined();
   });
@@ -30,12 +95,16 @@ describe(`Testing User model`, () => {
     }).not.toThrow();
   });
 
-  test(`Saving user to file works`, () => {
+  test(`Saving user to file after changing value works`, () => {
+    let val = !user.profile.preferences.config.allow_chat;
+
     expect(() => {
-      const val = user.profile.preferences.config.allow_chat;
-      user.profile.preferences.config.allow_chat = !val;
+      user.profile.preferences.config.allow_chat = val;
       user.save();
     }).not.toThrow();
+
+    user = User.load(`TestUser`);
+    expect(user.profile.preferences.config.allow_chat).toBe(val);
   });
 
   test(`Setting values from flat objects works`, () => {
