@@ -1,5 +1,5 @@
 import path from "path";
-import { Models } from "../lib/models/models.js";
+import { Models } from "../index.js";
 import { User } from "./user.models.js";
 
 beforeAll(() => {
@@ -23,14 +23,18 @@ describe(`Testing User model`, () => {
     expect(json).toBeDefined();
   });
 
-  test(`Saving user to file works`, () => {
-    expect(() => user.save()).not.toThrow();
-  });
-
   test(`Toggle "config.allow_chat" is permitted`, () => {
     const val = user.profile.preferences.config.allow_chat;
     expect(() => {
       user.profile.preferences.config.allow_chat = !val;
+    }).not.toThrow();
+  });
+
+  test(`Saving user to file works`, () => {
+    expect(() => {
+      const val = user.profile.preferences.config.allow_chat;
+      user.profile.preferences.config.allow_chat = !val;
+      user.save();
     }).not.toThrow();
   });
 

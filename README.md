@@ -10,7 +10,6 @@
 - [TEST] successive migrations should use successive files.
 - [BUG] for compound schema, only migrate the one(s) that changed, and create a migration that covers "all schema".
 
-
 - restructure:
     - Model (instance)
         - Models (factory)

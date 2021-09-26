@@ -1,5 +1,5 @@
 import { Config } from "./config.models.js";
-import { Model, Models } from "../lib/models/index.js";
+import { Model, Models } from "../index.js";
 const { fields } = Models;
 
 /**
