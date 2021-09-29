@@ -1,5 +1,5 @@
 import { Model, Models } from "../index.js";
-import { Profile } from "./user.models.js";
+import { Profile } from "./user.model.js";
 const { fields } = Models;
 
 /**

@@ -1,13 +1,15 @@
 import fs from "fs";
 import path from "path";
 import { Models } from "../index.js";
-import { User } from "./user.models.js";
+import { User } from "./user.model.js";
 
 /**
  * Our battery of User tests
  */
 describe(`Testing User model`, () => {
   const keepFiles = process.argv.includes(`--keep`);
+
+  let user = undefined;
 
   const testData = {
     admin: true,
@@ -29,13 +31,16 @@ describe(`Testing User model`, () => {
     },
   };
 
-  let user;
+  const setupModels = async (storePath) => {
+    await Models.useDefaultStore(storePath);
+    Models.register(User);
+  };
 
   /**
    * Before we start the tests, set up a store path, and register our User
    * model so that the on-disk schema file(s) exist when the tests run.
    */
-  beforeAll(() => {
+  beforeAll(async() => {
     // determine our store path
     const moduleURL = new URL(import.meta.url);
     const moduleDir = path.dirname(
@@ -45,9 +50,7 @@ describe(`Testing User model`, () => {
       )
     );
     const storePath = `${moduleDir}/store`;
-    fs.mkdirSync(storePath, { recursive: true });
-    Models.setStorePath(storePath);
-    Models.register(User);
+    return setupModels(storePath);
   });
 
   /**
@@ -67,10 +70,12 @@ describe(`Testing User model`, () => {
    */
   afterAll(() => {
     if (keepFiles) return;
-    fs.rmSync(Models.storePath, { recursive: true });
+    fs.rmSync(Models.store.storePath, { recursive: true });
   });
 
-  // THE TESTS START HERE
+  // ╔══════════════════════╗
+  // ║ THE TESTS START HERE ║
+  // ╚══════════════════════╝
 
   test(`Can create user TestUser`, () => {
     expect(() => {

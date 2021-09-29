@@ -7,8 +7,11 @@
 - simple save mechanism (data is by definition valid, default values are not stored)
 
 
-- [TEST] successive migrations should use successive files.
+- [TEST] successive migrations should use successive version-tracked files.
 - [BUG] for compound schema, only migrate the one(s) that changed, and create a migration that covers "all schema".
+            IE: user(config), change config, code current generates a user.v1.to.v2 migration instead of a config migration
+
+
 
 - restructure:
     - Model (instance)

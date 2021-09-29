@@ -1,4 +1,4 @@
-import { Config } from "./config.models.js";
+import { Config } from "./config.model.js";
 import { Model, Models } from "../index.js";
 const { fields } = Models;
 
