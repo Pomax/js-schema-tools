@@ -9,10 +9,9 @@ class User extends Model {
   __meta = {
     name: `users`,
     description: `Mahjong user data`,
-    distinct: true, // when saved, this is its own file.
-    filename: `profile.name`, // when saving instances, auto-generate the filename using this field.
+    distinct: true,
+    filename: `profile.name`,
   };
-
   admin = fields.boolean({ default: false, configurable: false });
   profile = fields.model(new Profile());
 }
@@ -23,10 +22,9 @@ class User extends Model {
 export class Profile extends Model {
   __meta = {
     description: `...`,
-    distinct: false, // Unlike the User model, this model should not be captured in its own file.
+    distinct: false,
     required: true,
   };
-
   name = fields.string({ required: true, configurable: false });
   password = fields.string({ required: true, configurable: false });
   preferences = fields.model(new Preferences());
@@ -38,21 +36,19 @@ export class Profile extends Model {
 class Preferences extends Model {
   __meta = {
     description: `General preferences object`,
-    distinct: false, // Nor should this model be saved in its own file.
+    distinct: false,
   };
-
   avatar = fields.string({
     description: `A picture that identifies this user`,
     validate_as: `filename`,
   });
-
   layout = fields.string({
     description: `Preferred game layout`,
     choices: [`traditional`, `stacked`],
     default: `traditional`,
   });
-
-  config = fields.model(new Config()); // And this is a fully independent model
+  // Everything except for this model is the same as v1
+  config = fields.model(new Config());
 }
 
 export { User, Config };
