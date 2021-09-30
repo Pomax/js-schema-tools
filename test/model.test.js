@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { Models } from "../index.js";
-import { User } from "./user.model.js";
+import { User } from "./models/user.model.js";
 
 /**
  * Our battery of User tests
@@ -40,7 +40,7 @@ describe(`Testing User model`, () => {
    * Before we start the tests, set up a store path, and register our User
    * model so that the on-disk schema file(s) exist when the tests run.
    */
-  beforeAll(async() => {
+  beforeAll(async () => {
     // determine our store path
     const moduleURL = new URL(import.meta.url);
     const moduleDir = path.dirname(
@@ -98,6 +98,20 @@ describe(`Testing User model`, () => {
     expect(() => {
       user.profile.preferences.config.allow_chat = !val;
     }).not.toThrow();
+  });
+
+  test(`Setting user avatar to non-png-file string is not permitted`, () => {
+    // slight hack: if we comment off the validate function in the model,
+    // this test will immediately pass instead of running anything.
+    const preferences = User.schema.profile.shape.preferences.shape;
+    const validate = preferences.avatar.__meta.validate;
+    if (!validate) return;
+
+    try {
+      user.profile.preferences.avatar = "not-a-png-file-name";
+    } catch (e) {
+      expect(e.errors).toStrictEqual([`Avatar is not a .png file`]);
+    }
   });
 
   test(`Saving user to file after changing value works`, () => {

@@ -1,5 +1,5 @@
 import { Config } from "./config.model.js";
-import { Model, Models } from "../index.js";
+import { Model, Models } from "../../index.js";
 const { fields } = Models;
 
 /**
@@ -43,7 +43,9 @@ class Preferences extends Model {
 
   avatar = fields.string({
     description: `A picture that identifies this user`,
-    validate_as: `filename`,
+    validate: function (value) {
+      if (!value.endsWith(`.png`)) throw new Error(`Avatar is not a .png file`);
+    },
   });
 
   layout = fields.string({

@@ -8,23 +8,17 @@
     "jss-makemigration": "./lib/schema/migrations/cli.js"
   },
   "scripts": {
-    "test": "node test/test.js && npm run clean",
-    "clean": "rm -rf ./json-data-store",
+    "test": "npm run test:jest:models && npm run test:jest:migrations",
     "test:jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --verbose=false",
-    "test:jest:model": "npm run test:jest -- test/model.test.js",
-    "test:jest:migration": "npm run test:jest -- test/migration.test.js",
-    "test:cli": "npm uninstall -g && npm install -g && jss-makemigrations",
-    "test:model": "node ./test/model.test.js",
-    "test:migrate": "npm run test:model && node ./test/migration.test.js"
+    "test:jest:models": "npm run test:jest -- test/model.test.js",
+    "test:jest:migrations": "npm run test:jest -- test/migration.test.js"
   },
   "keywords": [
     "js",
-    "datastore",
-    "json",
-    "flat",
-    "file",
-    "db",
-    "schema"
+    "model",
+    "schema",
+    "diff",
+    "equals"
   ],
   "author": "Pomax",
   "license": "MIT",

@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
 import { Models } from "../index.js";
-import { User as OriginalUser } from "./user.model.js";
-import { User } from "./user.model.v2.js";
-import { User as IndirectedUser } from "./user.model.v3.js";
-import { Config } from "./config.model.v2.js";
+import { User as OriginalUser } from "./models/user.model.js";
+import { User } from "./models/user.model.v2.js";
+import { User as IndirectedUser } from "./models/user.model.v3.js";
+import { Config } from "./models/config.model.v2.js";
 
 // determine our store path
 const moduleURL = new URL(import.meta.url);
