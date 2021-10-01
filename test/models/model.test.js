@@ -11,7 +11,27 @@ const moduleDir = path.dirname(
 /**
  * Our battery of User tests
  */
-describe(`Testing User model`, () => {
+
+describe(`Testing User model without store backing`, () => {
+  beforeAll(async () => {
+    Models.resetRegistrations();
+    Models.setStore(undefined);
+  });
+
+  test(`Can create User model without a store backing`, () => {
+    const data = {
+      profile: {
+        name: `test`,
+        password: `dace`,
+      },
+    };
+    const user = User.create(data);
+    expect(user.profile.name).toBe(data.profile.name);
+    expect(user.profile.password).toBe(data.profile.password);
+  });
+});
+
+describe(`Testing User model with store backing`, () => {
   const keepFiles = process.argv.includes(`--keep`);
 
   const storePath = `${moduleDir}/store`;
@@ -44,6 +64,7 @@ describe(`Testing User model`, () => {
    */
   beforeAll(async () => {
     await Models.useDefaultStore(storePath);
+    Models.resetRegistrations();
     Models.register(User);
   });
 
