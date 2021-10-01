@@ -4,7 +4,6 @@ import { validate } from "../schema/basic-js-schema.js";
 import { makeMigration } from "../schema/migrations/make-migration.js";
 
 (function () {
-
   // Let's mess with this schema!
   const changed_schema = JSON.parse(JSON.stringify(config_schema));
   changed_schema.wind_rotation.__meta.required = true;
@@ -44,7 +43,6 @@ import { makeMigration } from "../schema/migrations/make-migration.js";
   );
   if (errors) console.log(errors);
 
-
   // should be an error about a missing "updated_property"
   errors = validate(changed_schema, default_config);
   console.log(
@@ -54,9 +52,7 @@ import { makeMigration } from "../schema/migrations/make-migration.js";
   );
   if (errors) console.log(errors);
 
-
   console.log(`\n\n`);
-
 
   const updated = applyDiff(operations, default_config);
 

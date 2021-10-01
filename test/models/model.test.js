@@ -1,13 +1,20 @@
 import fs from "fs";
 import path from "path";
-import { Models } from "../index.js";
-import { User } from "./models/user.model.js";
+import { Models } from "../../index.js";
+import { User } from "./user.model.js";
+
+const moduleURL = new URL(import.meta.url);
+const moduleDir = path.dirname(
+  moduleURL.href.replace(`file:///`, process.platform === `win32` ? `` : `/`)
+);
 
 /**
  * Our battery of User tests
  */
 describe(`Testing User model`, () => {
   const keepFiles = process.argv.includes(`--keep`);
+
+  const storePath = `${moduleDir}/store`;
 
   let user = undefined;
 
@@ -31,26 +38,13 @@ describe(`Testing User model`, () => {
     },
   };
 
-  const setupModels = async (storePath) => {
-    await Models.useDefaultStore(storePath);
-    Models.register(User);
-  };
-
   /**
    * Before we start the tests, set up a store path, and register our User
    * model so that the on-disk schema file(s) exist when the tests run.
    */
   beforeAll(async () => {
-    // determine our store path
-    const moduleURL = new URL(import.meta.url);
-    const moduleDir = path.dirname(
-      moduleURL.href.replace(
-        `file:///`,
-        process.platform === `win32` ? `` : `/`
-      )
-    );
-    const storePath = `${moduleDir}/store`;
-    return setupModels(storePath);
+    await Models.useDefaultStore(storePath);
+    Models.register(User);
   });
 
   /**
@@ -60,7 +54,7 @@ describe(`Testing User model`, () => {
     try {
       user = User.load(`TestUser`);
     } catch (e) {
-      // this will fail for the first test, which builds this record.
+      // this will fail for the first test, which then builds this record.
     }
   });
 
@@ -70,7 +64,7 @@ describe(`Testing User model`, () => {
    */
   afterAll(() => {
     if (keepFiles) return;
-    fs.rmSync(Models.store.storePath, { recursive: true });
+    fs.rmSync(storePath, { recursive: true });
   });
 
   // ╔══════════════════════╗
