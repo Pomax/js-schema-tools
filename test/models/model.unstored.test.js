@@ -6,20 +6,27 @@ import { User } from "./user.model.js";
  */
 
 describe(`Testing User model without store backing`, () => {
+  const testData = {
+    profile: {
+      name: `test`,
+      password: `dace`,
+    },
+  };
+
   beforeAll(async () => {
     Models.resetRegistrations();
     Models.setStore(undefined);
   });
 
   test(`Can create User model without a store backing`, () => {
-    const data = {
-      profile: {
-        name: `test`,
-        password: `dace`,
-      },
-    };
-    const user = User.create(data);
-    expect(user.profile.name).toBe(data.profile.name);
-    expect(user.profile.password).toBe(data.profile.password);
+    const user = User.create(testData);
+    expect(user.profile.name).toBe(testData.profile.name);
+    expect(user.profile.password).toBe(testData.profile.password);
+  });
+
+  test(`Submodels work as standalone models`, () => {
+    const user = User.create(testData);
+    expect(user.toHTMLTable().slice(0, 6)).toBe(`<table`);
+    expect(user.profile.toHTMLTable().slice(0, 6)).toBe(`<table`);
   });
 });

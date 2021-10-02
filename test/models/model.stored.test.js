@@ -101,6 +101,11 @@ describe(`Testing User model with store backing`, () => {
     expect(json).toBeDefined();
   });
 
+  test(`Submodels work as standalone models`, () => {
+    expect(user.toHTMLTable().slice(0, 6)).toBe(`<table`);
+    expect(user.profile.toHTMLTable().slice(0, 6)).toBe(`<table`);
+  });
+
   test(`Toggle "config.allow_chat" is permitted (direct)`, () => {
     const val = user.profile.preferences.config.allow_chat;
     expect(() => {
