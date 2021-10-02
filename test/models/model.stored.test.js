@@ -179,6 +179,27 @@ describe(`Testing User model with store backing`, () => {
     }).not.toThrow();
   });
 
+  test(`Model resetting works as expected`, () => {
+    const { name, password } = user.profile;
+    user.profile.preferences.config.end_of_hand_timeout = 0;
+    user.profile.preferences.avatar = `empty.png`;
+    user.profile.reset();
+
+    // end_of_hand_timeout is not required, and has a default value to revert to.
+    expect(user.profile.preferences.config.end_of_hand_timeout).toBe(10000);
+
+    // avatar is not required, but has no default, so should become undefined.
+    expect(user.profile.preferences.avatar).toBe(undefined);
+
+    // The name and password fields are required, have no defaults, and may not be undefined.
+    // As such, they should stay what they were before reset() was called.
+    expect(user.profile.name).toBe(name);
+    expect(user.profile.password).toBe(password);
+
+    // and we should be able to save this user without errors, still
+    expect(() => user.save()).not.toThrow();
+  });
+
   test(`Setting "config.player_count" to false is a validation error (direct)`, () => {
     expect(() => {
       user.profile.preferences.config.player_count = false;
