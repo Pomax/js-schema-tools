@@ -85,11 +85,20 @@ describe(`Testing User model with store backing`, () => {
     expect(json).toBeDefined();
   });
 
-  test(`Toggle "config.allow_chat" is permitted`, () => {
+  test(`Toggle "config.allow_chat" is permitted (direct)`, () => {
     const val = user.profile.preferences.config.allow_chat;
     expect(() => {
       user.profile.preferences.config.allow_chat = !val;
     }).not.toThrow();
+  });
+
+  test(`Toggle "config.allow_chat" is permitted (pathkey)`, () => {
+    const val = user.profile.preferences.config.allow_chat;
+    expect(() => {
+      user.set(`profile.preferences.config.allow_chat`, !val);
+    }).not.toThrow();
+
+    expect(user.get(`profile.preferences.config.allow_chat`)).toBe(!val);
   });
 
   test(`Setting user avatar to non-png-file string is not permitted`, () => {
@@ -149,10 +158,24 @@ describe(`Testing User model with store backing`, () => {
     }).not.toThrow();
   });
 
-  test(`Setting "config.player_count" to false is a validation error`, () => {
+  test(`Setting "config.player_count" to false is a validation error (direct)`, () => {
     expect(() => {
       user.profile.preferences.config.player_count = false;
     }).toThrow(`Could not assign key "player_count" value "false".`);
+  });
+
+  test(`Setting "config.player_count" to false is a validation error (pathkey)`, () => {
+    expect(() => {
+      user.set(`profile.preferences.config.player_count`, false);
+    }).toThrow(`Could not assign key "player_count" value "false".`);
+  });
+
+  test(`Setting nonexistent pathkey is a validation error`, () => {
+    expect(() => {
+      user.set(`profile.preferences.config.unknown_setting`, 1);
+    }).toThrow(
+      `User model does not support profile.preferences.config.unknown_setting`
+    );
   });
 
   test(`Assigning bad subtrees throws`, () => {
