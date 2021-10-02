@@ -174,8 +174,30 @@ describe(`Testing User model with store backing`, () => {
     expect(() => {
       user.set(`profile.preferences.config.unknown_setting`, 1);
     }).toThrow(
-      `User model does not support profile.preferences.config.unknown_setting`
+      `Property [profile.preferences.config.unknown_setting] is not defined for model User.`
     );
+  });
+
+  test(`Incomplete models can be created but not saved`, () => {
+    let incomplete;
+    expect(() => {
+      incomplete = User.create(
+        { "profile.name": `Just a name` },
+        User.ALLOW_INCOMPLETE
+      );
+    }).not.toThrow();
+
+    expect(() => {
+      incomplete.save();
+    }).toThrow(`Cannot save incomplete model (created with ALLOW_INCOMPLETE`);
+
+    try {
+      incomplete.save();
+    } catch (err) {
+      expect(err.errors).toStrictEqual([
+        "profile.password: required field missing.",
+      ]);
+    }
   });
 
   test(`Assigning bad subtrees throws`, () => {
