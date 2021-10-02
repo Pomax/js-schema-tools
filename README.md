@@ -15,6 +15,7 @@ See https://github.com/facebook/jest/issues/11438#issuecomment-923835189 for mor
 - values are automatically validated during creation/assignment
 - simple save mechanism (data is by definition valid, default values are not stored)
 
+- [TASK] come up with a way to say "read-only" in addition to "configurable" (for form purposes)
 
 - [TESTING] add form tests
 - [TESTING] add diff tests
