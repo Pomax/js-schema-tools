@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Models } from "../../index.js";
 import { User } from "./user.model.js";
+import { registry } from "../../lib/models/model-registry.js";
 
 const moduleURL = new URL(import.meta.url);
 const moduleDir = path.dirname(
@@ -68,6 +69,21 @@ describe(`Testing User model with store backing`, () => {
   // ╔══════════════════════╗
   // ║ THE TESTS START HERE ║
   // ╚══════════════════════╝
+
+  test(`beforeAll User model registration should have registered four schemas`, () => {
+    expect(Object.keys(registry.REGISTER)).toStrictEqual([
+      `Config`,
+      `Preferences`,
+      `Profile`,
+      `User`,
+    ]);
+  });
+
+  test(`beforeAll User model registration should only use two schema directories`, () => {
+    const dirs = Array.from(fs.readdirSync(storePath));
+    // Note that Array.from is because of a Jest bug: https://github.com/facebook/jest/issues/11923
+    expect(dirs).toStrictEqual([`config`, `users`]);
+  });
 
   test(`Can create user TestUser`, () => {
     expect(() => {
