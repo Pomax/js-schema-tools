@@ -1,26 +1,63 @@
 # Use Models For Data (dot JS)
 
-- define a model to work with, using modern JS class syntax
-- automatic schema-backing and validation
+> "Just remember to always validate your data."
+>
+> "Why? I use models for data. My data is always valid."
+>
+> "I mean user-submitted data."
+>
+> "And I mean _all_ my data. All my data is always valid, by definition."
+>
+> "... tell me more?"
 
-- tell the model manager which storage system to use (required)
-- Either create new models, or load them from storage
-- values are automatically validated during creation/assignment
-- simple save mechanism (data is by definition valid, default values are not stored)
+1. Define a model to work with, using straight-forward modern JS syntax.
+
+```js
+class MyModel extends Model {
+    __meta = {
+        name: `mymodel`,
+        description: `My model, which is going to be consistent by definition.`,
+    };
+
+    name = Fields.string({ required: true });
+    age = Fields.number({ validate: value => (value > 13) )});
+}
+```
+
+2. You are done, model instances are by definition always consistent and valid, with invalid assignments automatically getting rejected. No weird syntax, no tricks, you say `data.value = x` and if that `x` is invalid, the assignment throw an error.
+
+```js
+const plainData = {
+    name: `my name here!`
+};
+
+// let's lock in some data integrity:
+const modeled = MyModel.from(plainData);
+
+try {
+    modeled.age = 12;
+} catch (e) {
+    console.log(`Guess I'm not allowed to be 12`);
+}
+```
+
 
 # Topics for this library
 
 - defining models
     - class definitions
+    - custom validation
+        - false for simple validation failure
+        - throw an error for detailed validation failure
 - constructing models
     - create default
     - create default even though that means missing required fields (allowIncomplete)
     - create from data
     - create from data even if it's missing required fields
-    - loading from astore
+    - loading from a store
 - using models
-    - get/set values
-    - get/set subtrees
+    - set/get values with automatic validation
+    - set/get subtrees with automatic validation
     - toString (formatted JSON without defaults)
     - valueOf (fully qualified plain object)
     - reset([data])

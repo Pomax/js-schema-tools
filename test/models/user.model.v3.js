@@ -10,7 +10,7 @@ class User extends Model {
     name: `users`,
     description: `Mahjong user data`,
     distinct: true,
-    filename: `profile.name`,
+    recordname: `profile.name`,
   };
   admin = fields.boolean({ default: false, configurable: false });
   profile = fields.model(new Profile());
@@ -40,7 +40,9 @@ class Preferences extends Model {
   };
   avatar = fields.string({
     description: `A picture that identifies this user`,
-    validate_as: `filename`,
+    validate: function (value) {
+      if (!value.endsWith(`.png`)) throw new Error(`not a png image`);
+    },
   });
   layout = fields.string({
     description: `Preferred game layout`,

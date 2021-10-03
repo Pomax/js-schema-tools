@@ -25,7 +25,7 @@ const User extends Model {
     // metadata is the lifeblood of any properly managed model
     description: `a user model`,
     distinct: true,
-    filename: `name`,
+    recordname: `name`,
   }
 
   // And then we define the fields that this model should have,
