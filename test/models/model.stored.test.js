@@ -85,11 +85,36 @@ describe(`Testing User model with store backing`, () => {
     expect(dirs).toStrictEqual([`config`, `users`]);
   });
 
+  test(`User.create without a payload is not an error`, () => {
+    expect(() => User.create(undefined, true)).not.toThrow();
+  });
+
+  test(`User.from without a payload is an error`, () => {
+    expect(() => User.from()).toThrow(
+      `Model.from() must be called with a data object.`
+    );
+  });
+
   test(`Can create user TestUser`, () => {
     expect(() => {
-      const user = User.create(testData);
+      const user = User.from(testData);
       user.save();
     }).not.toThrow();
+  });
+
+  test(`User .valueOf is a fully qualified plain object`, () => {
+    const data = user.valueOf();
+    const parsed = JSON.parse(JSON.stringify(data));
+    expect(parsed.profile.preferences.config.player_count).toBeDefined();
+    expect(parsed.profile.preferences.config.player_count).toBe(
+      user.profile.preferences.config.player_count
+    );
+  });
+
+  test(`User .toString is a deltas-only string`, () => {
+    const parsed = JSON.parse(user.toString());
+    expect(parsed.profile.preferences.config.end_of_hand_timeout).toBeDefined();
+    expect(parsed.profile.preferences.config.player_count).not.toBeDefined();
   });
 
   test(`User "TestUser" loads from file`, () => {
