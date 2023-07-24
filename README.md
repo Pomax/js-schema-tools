@@ -1,14 +1,22 @@
 # Use Models For Data (dot JS)
 
-> "Just remember to always validate your data."
->
-> "Why? I use models for data. My data is always valid."
->
-> "I mean user-submitted data."
->
-> "And I mean _all_ my data. All my data is always valid, by definition."
->
-> "... tell me more?"
+<div style="width:30em; margin: auto; display: flex; flex-direction: column;">
+<p style="align-self: flex-start; display: inline-block; background: #34F; color: white; font-weight:bold; padding: 0.5em 1em; border-radius: 0.5em; max-width: 24em;">
+Just remember to always validate your data. 🔥🔥🔥
+</p>
+<p style="align-self: flex-end; display: inline-block; background: #34F; color: white; font-weight:bold; padding: 0.5em 1em; border-radius: 0.5em; max-width: 24em;">
+Why? I use models for data. My data is always valid.
+</p>
+<p style="align-self: flex-start; display: inline-block; background: #34F; color: white; font-weight:bold; padding: 0.5em 1em; border-radius: 0.5em; max-width: 24em;">
+I mean user-submitted data. ⚠️👀
+</p>
+<p style="align-self: flex-end; display: inline-block; background: #34F; color: white; font-weight:bold; padding: 0.5em 1em; border-radius: 0.5em; max-width: 24em;">
+And I mean *all* my data. All my data is always valid, by definition.
+</p>
+<p style="align-self: flex-start; display: inline-block; background: #34F; color: white; font-weight:bold; padding: 0.5em 1em; border-radius: 0.5em; max-width: 24em;">
+... tell me more?
+</p>
+</div>
 
 1. Define a model to work with, using straight-forward modern JS syntax.
 
